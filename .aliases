@@ -1,0 +1,46 @@
+#! /usr/bin/env bash
+
+# Directory traversal
+alias cd..="cd .."
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+# Files & directories
+alias l.='ls -d .*'
+alias lsd='ls -al | grep ^d' # Only list directories, including hidden ones
+alias ls="ls -hF"
+alias ll="ls -lahF"
+
+# Find
+alias ff="find * -follow | grep -i"
+alias gg="find . -name '*${2}' -print | xargs grep -nir '${1}';"
+
+# Development
+alias diffd="/usr/bin/diff -d -U"
+alias tailf="/usr/bin/tail -f -n 500"
+command -v hd > /dev/null || alias hd="hexdump -C"
+
+# Bash
+alias grep='grep --color=auto'
+alias tm='ps -ef | grep -i'
+alias active='grep -v -e "^$" -e"^ *#"'
+alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
+alias salt='openssl rand -base64 32'
+alias lastmod="ls -rt | tail -n1"
+
+# Git
+alias gst="git status -sb"
+alias gp="git push"
+alias gd="git difftool"
+alias gist="gist -c"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# ip
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
