@@ -1,0 +1,140 @@
+[advice]
+    statusHints = false
+
+[alias]
+    # crud
+    aa = add -A
+    st = status
+    ci = commit
+    br = branch -av
+    pl = pull --rebase
+    co = checkout
+    cp = cherry-pick -x
+    delete = branch -D
+    clean-remote = !"git-clean-remote"
+    sync = !"git pull --rebase; git submodule foreach git pull origin master"
+    sync-from = !"last = $(git this); git stash; git co $1; git nuke; git pl; git co $last; git nuke; git merge $1; git stash apply;"
+
+    # diff
+    w = whatchanged
+    dc = diff --cached
+    lastd = diff HEAD^
+    empty = !"echo 4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+    delta = !"f() { git cherry -v $1 master | grep '^+' | awk '{print $2}' | xargs git show --pretty=format:'%C(red)%H%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --summary --no-patch --color --decorate --stat --abbrev-commit --date=relative; }; f"
+    conflicted = !"git diff --name-only | uniq | xargs sub"
+
+    # Show verbose output about tags, branches or remotes
+    branches = branch -av
+    this = !"git rev-parse --abbrev-ref HEAD | tr -d '\n'"
+    cm = !"git log --pretty=format:'%h' -n 1 | tr -d '\n'"
+    cml = !"git log --pretty=format:'%H' -n 1 | tr -d '\n'"
+    remotes = remote -v
+    list-release-branches-remote = !"git branch --remote --list *201* | tr -d '  origin/'"
+    list-release-branches-local = !"git branch --list *201* | tr -d '* '"
+
+    # other
+    whatis = log --graph --decorate --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --abbrev-commit --date=relative --all -n 1
+    search = "log --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --date=relative --all -S"
+    match = !"f() { git log --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --date=relative --all | grep -i \"$1\"; }; f"
+    grep = grep -Ii
+    gr = grep -Ii
+
+    # editing
+    amend = commit --amend
+    fixdate = filter-branch --env-filter 'export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"'
+    unstage = reset HEAD
+    uncommit = reset --soft HEAD^
+    nuke = reset --hard HEAD
+    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+
+    # logging
+    diffl = diff -U1000000000 --cached HEAD^
+    filelog = log -u
+    logdiff = log --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --date=relative --all --patch
+    logstart = log --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --date=relative --all --reverse
+    conflicts = log --merge
+    hist = log --color --decorate --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --stat --abbrev-commit --date=relative --all
+    lol = log --decorate --pretty=format:'%C(red)%h%C(reset) %C(yellow)%d%C(reset) %s [%C(green)%an, %C(bold black)%cr%C(reset)]' --abbrev-commit --date=relative --all
+
+    # code review
+    cr-diff = diff --no-color -U1000000000
+    cr-log = log --graph --decorate --pretty=format:'%h -- %s' --abbrev-commit --all
+    cr-hist = log --color --graph --decorate --pretty=format:'%h -- %s' --stat --abbrev-commit --date=relative --all
+
+    # Lists
+    ls = ls-files
+    tags = tag -n1 -l
+    ignored = ls-files -o -i --exclude-standard
+    last = cat-file commit HEAD
+    rank = shortlog -sn --no-merges
+
+[apply]
+    whitespace = fix
+
+[blame]
+    date = relative
+
+[branch]
+    autosetupmerge = true
+    autosetuprebase = always
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    grep = auto
+    interactive = auto
+    ui = 1
+    pager = true
+
+[core]
+    autocrlf = false
+    editor = sub -n -w
+    excludesfile = ~/.gitignore
+    pager = less -FXRS -x4
+    ignorecase = false
+
+[difftool]
+    prompt = false
+
+[filter "lfs"]
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true
+
+[format]
+    pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
+
+[grep]
+    lineNumber = true
+    extendedRegexp = true
+
+[help]
+    autocorrect = 1
+
+[init]
+    templatedir = ~/.git_template
+
+[merge]
+    log = true
+    summary = true
+    verbosity = 1
+
+[mergetool]
+    keepBackup = true
+
+[push]
+    default = matching
+
+[rebase]
+    stat = true
+    autosquash = true
+
+[rerere]
+    # Remember my merges
+    # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
+    enabled = true
+
+[svn]
+    # push empty directory removals back to svn at directory deletes
+    rmdir = true

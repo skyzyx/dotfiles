@@ -33,7 +33,7 @@ export GIT_EXTENDED_PROMPT_TIME="true"
 [ -f /etc/profile.d/prompt.sh ] && source /etc/profile.d/prompt.sh
 
 # VirtualEnv
-[ -f ~/vendor/bin/activate ] && source ~/vendor/bin/activate
+[ -f ~/.vendor/bin/activate ] && source ~/.vendor/bin/activate
 
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
