@@ -16,5 +16,6 @@ mv ~/gitignore ~/.gitignore
 
 # Add VirtualEnv stuffs
 rm -Rf ~/.vendor
-sudo pip2.7 install --upgrade virtualenv && \
-virtualenv --python python2.7 .vendor
+
+echo "sudo pip2.7 install --upgrade virtualenv"
+echo "virtualenv --python python2.7 ~/.vendor"
