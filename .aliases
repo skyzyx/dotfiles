@@ -8,39 +8,43 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # Files & directories
-alias l.='ls -d .*'
-alias lsd='ls -al | grep ^d' # Only list directories, including hidden ones
-alias ls="ls -hF"
-alias ll="ls -lahF"
-
-# Find
-alias ff="find * -follow | grep -i"
-alias gg="find . -name '*${2}' -print | xargs grep -nir '${1}';"
+# brew install exa
+# https://www.nerdfonts.com
+alias ll="exa -aa -l -g -h --git --modified --time-style=long-iso -H --classify --icons --group-directories-first"
+alias ld="exa -aa -l -g -h --git --modified --time-style=long-iso -H --classify --icons --only-dirs"
 
 # Development
 alias diffd="/usr/bin/diff -d -U"
 alias tailf="/usr/bin/tail -f -n 500"
-command -v hd > /dev/null || alias hd="hexdump -C"
+alias record="asciinema rec -i 1.5"
+command -v hd >/dev/null || alias hd="hexdump -C"
+
+# Other shortcuts
+alias wget="wget --no-check-certificate --user-agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0 Safari/605.1.15\""
+alias fetch="wget -rkp -l 1"
+alias c='tr -d "\n" | pbcopy'
+alias git=hub
 
 # Bash
-alias grep='grep --color=auto'
-alias tm='ps -ef | grep -i'
-alias active='grep -v -e "^$" -e"^ *#"'
-alias freq='cut -f1 -d" " ~/.bash_history | sort | uniq -c | sort -nr | head -n 30'
 alias salt='openssl rand -base64 32'
 alias lastmod="ls -rt | tail -n1"
+alias listen="sudo lsof -iTCP -sTCP:LISTEN -n -P"
+alias cd="cdtfswitch"
 
 # Git
 alias gst="git status -sb"
 alias gp="git push"
 alias gd="git difftool"
-alias gist="gist -c"
-
-# Intuitive map function
-# For example, to list all directories that contain a certain file:
-# find . -name .gitattributes | map dirname
-alias map="xargs -n1"
 
 # ip
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias ip="curl -sSL https://ipapi.co/json | jq -Mr '.ip'"
+alias lip="ipconfig getifaddr"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
+
+alias jxa="osascript -l JavaScript -i"
+
+# Pipe my public key to my clipboard.
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | echo '=> Public key copied to pasteboard.'"
+
+# https://www.harfangapps.com/regis/docs/#connecting-via-an-ssh-tunnel
+alias htrace="docker run -it --name htrace.sh htrace.sh"
