@@ -36,6 +36,9 @@ shopt -s dirspell
 # If set, Bash includes filenames beginning with a ‘.’ in the results of filename expansion.
 shopt -s dotglob
 
+# If set, aliases are expanded as described below under Aliases, Aliases. This option is enabled by default for interactive shells.
+shopt -s expand_aliases
+
 # If set, the extended pattern matching features described above (see Pattern Matching) are enabled.
 shopt -s extglob
 
@@ -55,6 +58,12 @@ shopt -s histappend histreedit histverify
 # If set, and Readline is being used, Bash will attempt to perform hostname completion when a word containing a ‘@’ is
 # being completed (see Commands For Completion). This option is enabled by default.
 shopt -s hostcomplete
+
+# If set, Bash will send SIGHUP to all jobs when an interactive login shell exits (see Signals).
+shopt -s huponexit
+
+# Allow a word beginning with ‘#’ to cause that word and all remaining characters on that line to be ignored in an interactive shell. This option is enabled by default.
+shopt -s interactive_comments
 
 # If enabled, and the cmdhist option is enabled, multi-line commands are saved to the history with embedded newlines
 # rather than using semicolon separators where possible.
