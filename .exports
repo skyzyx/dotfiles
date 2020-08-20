@@ -1,39 +1,101 @@
 #! /usr/bin/env bash
 
+export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
-# Larger bash history (allow 32³ entries; default is 500)
-export HISTSIZE=32768;
-export HISTFILESIZE=$HISTSIZE;
-export HISTCONTROL=ignoredups;
-export HISTTIMEFORMAT='%F %T '
+# Environment Variables
+export ASDFROOT=$HOME/.asdf
+export ASDFINSTALLS=$HOME/.asdf/installs
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:LIBDIR
+export GOPATH="$HOME/gocode"
+export GO111MODULE=on
+export JAVA_HOME="$(/usr/libexec/java_home)"
 
-# Make some commands not show up in history
-export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help";
-
-# Prefer US English and use UTF-8
-export LANG="en_US.UTF-8";
-export LC_ALL="en_US.UTF-8";
-
-# Highlight section titles in manual pages
-export LESS_TERMCAP_md="${yellow}";
-
-# Don’t clear the screen after quitting a manual page
-export MANPAGER="less -X";
-
-# Always enable colored `grep` output
-export GREP_OPTIONS="--color=auto";
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_OPTS="+s --inline-info --multi --preview-window right:50% --preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200' --select-1 --exit-0"
+export FZF_DEFAULT_COMMAND="fd --follow --hidden --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS"
 
 # Git Extended Prompt
 export GIT_EXTENDED_PROMPT="true"
 export GIT_EXTENDED_PROMPT_COLOR="dark"
 export GIT_EXTENDED_PROMPT_TIME="true"
-[ -f /etc/profile.d/colors.sh ] && source /etc/profile.d/colors.sh
-[ -f /etc/profile.d/prompt.sh ] && source /etc/profile.d/prompt.sh
 
-# VirtualEnv
-[ -f ~/.vendor/bin/activate ] && source ~/.vendor/bin/activate
+# Path (Lower-Priority)
+export PATH=/Applications/VMware\ Fusion.app/Contents/Library/:$PATH
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+if type brew &>/dev/null; then
+	export BREW_PREFIX="$(brew --prefix)"
+	for bindir in ${BREW_PREFIX}/opt/*/libexec/gnubin; do export PATH=$bindir:$PATH; done
+	for mandir in ${BREW_PREFIX}/opt/*/libexec/gnuman; do export MANPATH=$mandir:$MANPATH; done
+fi
+export PATH="$JAVA_HOME/bin:$PATH"                                               # Java
+export PATH="$GOPATH/bin:$PATH"                                                  # Golang
+export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:$PATH # Swift
+export PATH=/Library/WebServer/Documents/gitflow:$PATH
+export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
+export PATH=$HOME/.poetry/bin:$PATH         # Python Poetry
+export PATH=$HOME/.git_commands/commands:$PATH
+export PATH=$HOME/.composer/vendor/bin:$PATH   # Composer/PHP
+export PATH=$HOME/.npm/node_modules/.bin:$PATH # npm
+export PATH=$HOME/bin:$PATH
+# Path (Higher-Priority)
 
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
+# OpenSSL
+export OPENSSL_INCLUDE_DIR="$BREW_PREFIX/openssl/include"
+export OPENSSL_LIB_DIR="$BREW_PREFIX/openssl/lib"
+
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+
+# Manpath (Lower-Priority)
+# Manpath (Higher-Priority)
+
+# Larger bash history (allow 32³ entries; default is 500)
+export HISTSIZE=32768
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL="erasedups:ignoreboth"
+export HISTTIMEFORMAT='%F %T '
+
+# Make some commands not show up in history
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:&:[ ]*:exit:bg:fg:history:clear"
+
+# Prefer US English and use UTF-8
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# Highlight section titles in manual pages
+export LESS_TERMCAP_md="${yellow}"
+
+# Don’t clear the screen after quitting a manual page
+export LESS='-R'
+export MANPAGER="less -X"
+export PAGER="less -rins"
+
+# Make VS Code the default editor
+export EDITOR="code"
+
+# cat ~/.composer/auth.json
+export HOMEBREW_GITHUB_API_TOKEN=*****
+export GITHUB_TOKEN=*****
+export GITHUB_API_TOKEN=$GITHUB_TOKEN
+
+# Durations for aws-vault
+export AWS_SESSION_TOKEN_TTL=8h
+export AWS_CHAINED_SESSION_TOKEN_TTL=8h
+export AWS_ASSUME_ROLE_TTL=8h
+export AWS_FEDERATION_TOKEN_TTL=8h
+
+# GPG
+export GPG_TTY=$(tty)
+
+# Automatically trim long paths in the prompt (requires Bash 4.x)
+export PROMPT_DIRTRIM=2
+
+# This defines where cd looks for targets
+# Add the directories you want to have fast access to, separated by colon
+# Ex: CDPATH=".:~:~/projects" will look for targets in the current working directory, in home and in the ~/projects folder
+export CDPATH="."
