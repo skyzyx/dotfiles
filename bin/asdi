@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+# Interactive asdf package/version installer
+
 package=$(asdf plugin-list-all | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:install]'")
 
 asdf plugin-add $package 2>/dev/null
