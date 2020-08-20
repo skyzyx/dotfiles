@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+package=$(asdf plugin-list-all | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:install]'")
+
+asdf plugin-add $package 2>/dev/null
+package=$(echo $package | awk '{print $1}')
+
+version=$(asdf list-all $package | sort -Vr | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:${pkg}:install]'")
+asdf install $package $version 2>/dev/null
+echo "asdf global $package $version"
