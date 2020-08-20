@@ -1,32 +1,63 @@
 #! /usr/bin/env bash
 
+# Creates a directory then moves into it right away
 function mkd() {
-    mkdir -p "$1" && cd "$1";
+	mkdir -p "$1" && cd "$1"
+}
+
+# Add your SSH pubkey to a server's authorized keys for next time
+function sshauth() {
+	ssh -T "$@" 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' <~/.ssh/id_rsa.pub
 }
 
 # ip
-function geoip {
-    curl -s http://httpbin.org/ip
+function geoip() {
+	curl -sSL http://httpbin.org/ip | jq -Mr '.origin'
 }
 
 # Determine size of a file or total size of a directory
 function fs() {
-    if du -b /dev/null > /dev/null 2>&1; then
-        local arg=-sbh
-    else
-        local arg=-sh
-    fi
-    if [[ -n "$@" ]]; then
-        du $arg -- "$@"
-    else
-        du $arg .[^.]* *
-    fi
+	if du -b /dev/null >/dev/null 2>&1; then
+		local arg=-sbh
+	else
+		local arg=-sh
+	fi
+	if [[ -n "$@" ]]; then
+		du $arg -- "$@"
+	else
+		du $arg .[^.]* *
+	fi
 }
 
 # Use Git’s colored diff when available
 hash git &>/dev/null
 if [ $? -eq 0 ]; then
-    function diff() {
-        git diff --no-index --color-words "$@"
-    }
+	function diff() {
+		git diff --no-index --color-words "$@"
+	}
 fi
+
+# Generate a completely random/unique password
+# brew install jzaleski/homebrew-jzaleski/apg
+# Usage:
+#   pw <length>
+function pw() {
+	apg -a 1 -n 1 -M SNCL -m $1 -x $1
+}
+
+# Decode AWS STS error messages
+# Usage:
+#   aws-vault exec <account> --no-session -- decode <base64>
+function decode() {
+	aws sts decode-authorization-message --encoded-message=$1 | jq -r ".DecodedMessage" | jq
+}
+
+# If directory contains versions.tf, use terraform-switch to install and activate the correct version of Terraform automatically
+# See ~/.aliases where `cd` is replaced with this function.
+function cdtfswitch() {
+	builtin cd "$@"
+	cdir=$PWD
+	if [ -e "$cdir/versions.tf" ]; then
+		tfswitch
+	fi
+}
