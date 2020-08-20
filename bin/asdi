@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
 # Interactive asdf package/version installer
+# Very quick and dirty. Expect errors, especially with ctrl+c.
 
 package=$(asdf plugin-list-all | eval "fzf ${FZF_DEFAULT_OPTS} -m --header='[asdf:install]'")
 
